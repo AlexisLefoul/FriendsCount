@@ -1,5 +1,5 @@
 {
-  "name": "api-restauration",
+  "name": "api-friend-count",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
@@ -9,12 +9,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@supabase/supabase-js": "^2.25.0",
     "bcrypt": "^5.1.0",
     "express": "^4.18.2",
-    "mongoose": "^6.7.1",
+    "global": "^4.4.0",
     "swagger-js-codegen": "^1.13.0",
-    "swagger-jsdoc": "5.0.1",
-    "swagger-ui-express": "^4.6.0",
-    "typescript": "^4.8.4"
+    "swagger-jsdoc": "6.2.8",
+    "swagger-ui-express": "^4.6.3",
+    "typescript": "^5.1.3"
   }
 }

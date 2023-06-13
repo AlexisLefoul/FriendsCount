@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -36,55 +36,113 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
-var mongoose_1 = require("mongoose");
-var userSchema = new mongoose_1.Schema({
-    identifiant: String,
-    password: String,
-    role: String,
-});
-var userModel = mongoose_1.default.model("Utilisateurs", userSchema);
-var User = /** @class */ (function () {
-    function User() {
+exports.UserService = void 0;
+var supabase_js_1 = require("@supabase/supabase-js");
+var supabaseUrl = "https://cekdzyiddjifsrtnemsj.supabase.co";
+var supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNla2R6eWlkZGppZnNydG5lbXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2Nzg3NTQsImV4cCI6MjAwMjI1NDc1NH0.22vNGb4SoqnVpX3vLGzlnjt3CRQy3RxnSRbEzILnro8";
+var UserService = /** @class */ (function () {
+    function UserService() {
+        this.supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseKey);
     }
-    User.getUser = function (identifiant) {
+    UserService.prototype.getUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
-                                case 0:
-                                    _a = resolve;
-                                    return [4 /*yield*/, userModel.findOne({ identifiant: identifiant })];
-                                case 1:
-                                    _a.apply(void 0, [_b.sent()]);
-                                    return [2 /*return*/];
-                            }
-                        });
-                    }); })];
-            });
-        });
-    };
-    User.insertUser = function (body) {
-        return __awaiter(this, void 0, void 0, function () {
-            var user;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        user = new userModel({
-                            identifiant: body.identifiant,
-                            password: body.password,
-                            role: body.role,
-                        });
-                        return [4 /*yield*/, user.save()];
-                    case 1: return [2 /*return*/, _a.sent()];
+            var _a, data, error;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.supabase
+                            .from("users")
+                            .select("*")];
+                    case 1:
+                        _a = _b.sent(), data = _a.data, error = _a.error;
+                        if (error) {
+                            console.error("Erreur lors de la récupération des utilisateurs :", error.message);
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, data];
                 }
             });
         });
     };
-    return User;
+    UserService.prototype.getUser = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, data, error;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.supabase
+                            .from("users")
+                            .select("*")
+                            .eq("id", userId)
+                            .single()];
+                    case 1:
+                        _a = _b.sent(), data = _a.data, error = _a.error;
+                        if (error) {
+                            console.error("Erreur lors de la récupération de l'utilisateur :", error.message);
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, data];
+                }
+            });
+        });
+    };
+    UserService.prototype.createUser = function (body) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, data, error;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.supabase
+                            .from("users")
+                            .insert([{ nom: body.nom, prenom: body.prenom }])
+                            .single()];
+                    case 1:
+                        _a = _b.sent(), data = _a.data, error = _a.error;
+                        if (error) {
+                            console.error("Erreur lors de la création de l'utilisateur :", error.message);
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, data];
+                }
+            });
+        });
+    };
+    UserService.prototype.updateUser = function (id, nom, prenom) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, data, error;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.supabase
+                            .from("users")
+                            .update({ nom: nom, prenom: prenom })
+                            .eq("id", id)
+                            .single()];
+                    case 1:
+                        _a = _b.sent(), data = _a.data, error = _a.error;
+                        if (error) {
+                            console.error("Erreur lors de la mise à jour de l'utilisateur :", error.message);
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, data];
+                }
+            });
+        });
+    };
+    UserService.prototype.deleteUser = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.supabase.from("users").delete().eq("id", id)];
+                    case 1:
+                        error = (_a.sent()).error;
+                        if (error) {
+                            console.error("Erreur lors de la suppression de l'utilisateur :", error.message);
+                            return [2 /*return*/, false];
+                        }
+                        return [2 /*return*/, true];
+                }
+            });
+        });
+    };
+    return UserService;
 }());
-exports.User = User;
+exports.UserService = UserService;
 //# sourceMappingURL=user.js.map

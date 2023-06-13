@@ -1,49 +1,89 @@
-import { User } from "../models/user";
+import { UserService } from "../models/user";
+
+/**
+ * @swagger
+ * tags:
+ *   name: Utilisateurs
+ *   description: API pour la gestion des utilisateurs
+ */
 
 export class ControlerUser {
   /**
    * @swagger
-   * /user/:identifiant:
+   * /users:
    *    get:
    *      tags:
    *        - Utilisateurs
-   *      summary: Retourne un utilisateur
+   *      summary: Retourne la liste des utilisateurs
+   *      responses:
+   *        200:
+   *          description: Liste des utilisateurs.
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: array
+   *                items:
+   *                   type: object
+   *                   properties:
+   *                     id:
+   *                       type: string
+   *                       description: L'ID unique de l'utilisateur.
+   *                       example: 0
+   *                     nom:
+   *                       type: string
+   *                       description: Le nom de l'utilisateur.
+   *                       example: Dupont
+   *                     prenom:
+   *                       type: string
+   *                       description: Le prénom de l'utilisateur.
+   *                       example: Jean
+   */
+
+  public static async getUsers(req, res) {
+    const userService = new UserService();
+    const users = await userService.getUsers();
+    res.send(users);
+  }
+
+  /**
+   * @swagger
+   * /user/{identifiant}:
+   *    get:
+   *      tags:
+   *        - Utilisateurs
+   *      summary: Retourne un utilisateur par son identifiant
    *      parameters:
    *        - in: path
    *          name: identifiant
    *          type: string
    *          description: L'identifiant de l'utilisateur.
    *          required: true
-   *      description:
    *      responses:
    *        200:
-   *          description: Un utilisateur.
+   *          description: Un utilisateur correspondant à l'identifiant.
    *          content:
    *            application/json:
    *              schema:
-   *                type: object
-   *                properties:
-   *                  id:
-   *                    type: string
-   *                    description: L'ID de l'utilisateur
-   *                    example: 0
-   *                  identifiant:
-   *                    type: string
-   *                    description: L'identifiant de l'utilisateur.
-   *                    example: Aurélien
-   *                  password:
-   *                    type: string
-   *                    description: Le mot de passe hashé de l'utilisateur.
-   *                    example: $2a$10$CwT
-   *                  role:
-   *                    type: string
-   *                    description: Le role de l'utilisateur.
-   *                    example: client
+   *                 type: object
+   *                 properties:
+   *                   id:
+   *                     type: string
+   *                     description: L'ID unique de l'utilisateur.
+   *                     example: 0
+   *                   nom:
+   *                     type: string
+   *                     description: Le nom de l'utilisateur.
+   *                     example: Dupont
+   *                   prenom:
+   *                     type: string
+   *                     description: Le prénom de l'utilisateur.
+   *                     example: Jean
    */
 
   public static async getUser(req, res) {
-    let userName: String = req.params.identifiant;
-    let user = await User.getUser(userName);
+    const userService = new UserService();
+    let user_id: number = req.params.identifiant;
+    let user = await userService.getUser(user_id);
     res.send(user);
   }
 
@@ -54,35 +94,30 @@ export class ControlerUser {
    *      tags:
    *        - Utilisateurs
    *      summary: Ajoute un utilisateur
-   *      parameters:
-   *        - in: body
-   *          name: utilisateur
-   *          type: object
-   *          description: Les données de l'utilisateur à ajouter
-   *          schema:
-   *            type: object
-   *            properties:
-   *              identifiant:
-   *                type: string
-   *                description: L'identifiant de l'utilisateur.
-   *                example: Awen
-   *              password:
-   *                type: string
-   *                description: Le mot de passe hashé de l'utilisateur.
-   *                example: $2a$10$CwT
-   *              role:
-   *                type: string
-   *                description: Le role de l'utilisateur.
-   *                example: client
-   *      description:
+   *      requestBody:
+   *        description: Les données de l'utilisateur à ajouter
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                nom:
+   *                  type: string
+   *                  description: Le nom de l'utilisateur.
+   *                  example: Dupont
+   *                prenom:
+   *                  type: string
+   *                  description: Le prénom de l'utilisateur.
+   *                  example: Jean
    *      responses:
-   *        200:
-   *          description: Utilisateur ajouté.
+   *        201:
+   *          description: Utilisateur ajouté avec succès.
    */
 
-  public static async insertUser(req, res) {
-    await User.insertUser(req.body);
-    res.status(201);
-    res.send();
+  public static async createUser(req, res) {
+    const userService = new UserService();
+    await userService.createUser(req.body);
+    res.status(201).send();
   }
 }

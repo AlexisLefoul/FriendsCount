@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -36,12 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var controllerAliment_1 = require("./controller/controllerAliment");
-var controllerPlats_1 = require("./controller/controllerPlats");
 var controllerUser_1 = require("./controller/controllerUser");
-var mongoose = require("mongoose");
+var supabase_js_1 = require("@supabase/supabase-js");
 var express = require("express");
 var bodyParser = require("body-parser");
+var supabaseUrl = "https://cekdzyiddjifsrtnemsj.supabase.co";
+var supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNla2R6eWlkZGppZnNydG5lbXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2Nzg3NTQsImV4cCI6MjAwMjI1NDc1NH0.22vNGb4SoqnVpX3vLGzlnjt3CRQy3RxnSRbEzILnro8";
+var supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseKey);
 /**
  * On créé une nouvelle "application" express
  */
@@ -62,39 +63,12 @@ app.use(function (request, response, next) {
 });
 // Default
 app.get("/", function (req, res) { return res.send("🏠"); });
-// GET Aliments
-app.get("/aliments", function (req, res) { return controllerAliment_1.ControlerAliment.getAliments(req, res); });
-app.get("/aliments/:id", function (req, res) {
-    return controllerAliment_1.ControlerAliment.getOneAliments(req, res);
-});
-app.get("/aliments/type/:type", function (req, res) {
-    return controllerAliment_1.ControlerAliment.getAlimentsParType(req, res);
-});
-// GET Plats
-app.get("/plats", function (req, res) { return controllerPlats_1.ControlerPlat.getPlats(req, res); });
-app.get("/plats/:id", function (req, res) { return controllerPlats_1.ControlerPlat.getOnPlats(req, res); });
-app.get("/plats/type/:type", function (req, res) {
-    return controllerPlats_1.ControlerPlat.getPlatsParType(req, res);
-});
 // GET Utilisateur
+app.get("/users", function (req, res) { return controllerUser_1.ControlerUser.getUsers(req, res); });
 app.get("/user/:identifiant", function (req, res) { return controllerUser_1.ControlerUser.getUser(req, res); });
-// POST Aliments
-app.post("/aliments/add", function (req, res) {
-    return controllerAliment_1.ControlerAliment.insertAliment(req, res);
-});
-app.put("/aliments/update/:id", function (req, res) {
-    return controllerAliment_1.ControlerAliment.updateAliment(req, res);
-});
-// POST Plats
-app.post("/plats/add", function (req, res) { return controllerPlats_1.ControlerPlat.insertPlat(req, res); });
-app.put("/plats/update/:id", function (req, res) { return controllerPlats_1.ControlerPlat.updatePlat(req, res); });
 // POST User
-app.post("/user/add", function (req, res) { return controllerUser_1.ControlerUser.insertUser(req, res); });
+app.post("/user/add", function (req, res) { return controllerUser_1.ControlerUser.createUser(req, res); });
 // DELETE
-app.delete("/aliments/:id", function (req, res) {
-    return controllerAliment_1.ControlerAliment.deleteAliment(req, res);
-});
-app.delete("/plats/:id", function (req, res) { return controllerPlats_1.ControlerPlat.deletePlat(req, res); });
 app.listen(3000, function () {
     "Serveur listening on port :3000";
 });
@@ -102,10 +76,10 @@ function main() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, mongoose.connect("mongodb://localhost/Gestion_stock")];
+                case 0: return [4 /*yield*/, supabase.auth.getUser()];
                 case 1:
                     _a.sent();
-                    console.log("Connexion mongoose ok");
+                    console.log("Connexion bdd ok");
                     return [2 /*return*/];
             }
         });

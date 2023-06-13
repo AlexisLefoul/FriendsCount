@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -38,56 +38,104 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ControlerUser = void 0;
 var user_1 = require("../models/user");
+/**
+ * @swagger
+ * tags:
+ *   name: Utilisateurs
+ *   description: API pour la gestion des utilisateurs
+ */
 var ControlerUser = /** @class */ (function () {
     function ControlerUser() {
     }
     /**
      * @swagger
-     * /user/:identifiant:
+     * /users:
      *    get:
      *      tags:
      *        - Utilisateurs
-     *      summary: Retourne un utilisateur
+     *      summary: Retourne la liste des utilisateurs
+     *      responses:
+     *        200:
+     *          description: Liste des utilisateurs.
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: array
+     *                items:
+     *                   type: object
+     *                   properties:
+     *                     id:
+     *                       type: string
+     *                       description: L'ID unique de l'utilisateur.
+     *                       example: 0
+     *                     nom:
+     *                       type: string
+     *                       description: Le nom de l'utilisateur.
+     *                       example: Dupont
+     *                     prenom:
+     *                       type: string
+     *                       description: Le prénom de l'utilisateur.
+     *                       example: Jean
+     */
+    ControlerUser.getUsers = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var userService, users;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        userService = new user_1.UserService();
+                        return [4 /*yield*/, userService.getUsers()];
+                    case 1:
+                        users = _a.sent();
+                        res.send(users);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * @swagger
+     * /user/{identifiant}:
+     *    get:
+     *      tags:
+     *        - Utilisateurs
+     *      summary: Retourne un utilisateur par son identifiant
      *      parameters:
      *        - in: path
      *          name: identifiant
      *          type: string
      *          description: L'identifiant de l'utilisateur.
      *          required: true
-     *      description:
      *      responses:
      *        200:
-     *          description: Un utilisateur.
+     *          description: Un utilisateur correspondant à l'identifiant.
      *          content:
      *            application/json:
      *              schema:
-     *                type: object
-     *                properties:
-     *                  id:
-     *                    type: string
-     *                    description: L'ID de l'utilisateur
-     *                    example: 0
-     *                  identifiant:
-     *                    type: string
-     *                    description: L'identifiant de l'utilisateur.
-     *                    example: Aurélien
-     *                  password:
-     *                    type: string
-     *                    description: Le mot de passe hashé de l'utilisateur.
-     *                    example: $2a$10$CwT
-     *                  role:
-     *                    type: string
-     *                    description: Le role de l'utilisateur.
-     *                    example: client
+     *                 type: object
+     *                 properties:
+     *                   id:
+     *                     type: string
+     *                     description: L'ID unique de l'utilisateur.
+     *                     example: 0
+     *                   nom:
+     *                     type: string
+     *                     description: Le nom de l'utilisateur.
+     *                     example: Dupont
+     *                   prenom:
+     *                     type: string
+     *                     description: Le prénom de l'utilisateur.
+     *                     example: Jean
      */
     ControlerUser.getUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var userName, user;
+            var userService, user_id, user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        userName = req.params.identifiant;
-                        return [4 /*yield*/, user_1.User.getUser(userName)];
+                        userService = new user_1.UserService();
+                        user_id = req.params.identifiant;
+                        return [4 /*yield*/, userService.getUser(user_id)];
                     case 1:
                         user = _a.sent();
                         res.send(user);
@@ -103,40 +151,37 @@ var ControlerUser = /** @class */ (function () {
      *      tags:
      *        - Utilisateurs
      *      summary: Ajoute un utilisateur
-     *      parameters:
-     *        - in: body
-     *          name: utilisateur
-     *          type: object
-     *          description: Les données de l'utilisateur à ajouter
-     *          schema:
-     *            type: object
-     *            properties:
-     *              identifiant:
-     *                type: string
-     *                description: L'identifiant de l'utilisateur.
-     *                example: Awen
-     *              password:
-     *                type: string
-     *                description: Le mot de passe hashé de l'utilisateur.
-     *                example: $2a$10$CwT
-     *              role:
-     *                type: string
-     *                description: Le role de l'utilisateur.
-     *                example: client
-     *      description:
+     *      requestBody:
+     *        description: Les données de l'utilisateur à ajouter
+     *        required: true
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              properties:
+     *                nom:
+     *                  type: string
+     *                  description: Le nom de l'utilisateur.
+     *                  example: Dupont
+     *                prenom:
+     *                  type: string
+     *                  description: Le prénom de l'utilisateur.
+     *                  example: Jean
      *      responses:
-     *        200:
-     *          description: Utilisateur ajouté.
+     *        201:
+     *          description: Utilisateur ajouté avec succès.
      */
-    ControlerUser.insertUser = function (req, res) {
+    ControlerUser.createUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
+            var userService;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, user_1.User.insertUser(req.body)];
+                    case 0:
+                        userService = new user_1.UserService();
+                        return [4 /*yield*/, userService.createUser(req.body)];
                     case 1:
                         _a.sent();
-                        res.status(201);
-                        res.send();
+                        res.status(201).send();
                         return [2 /*return*/];
                 }
             });
