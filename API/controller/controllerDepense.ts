@@ -1,4 +1,4 @@
-import { UserService } from "../models/user";
+import { DepenseService } from "../models/depense";
 
 /**
  * @swagger
@@ -7,7 +7,7 @@ import { UserService } from "../models/user";
  *   description: API pour la gestion des utilisateurs
  */
 
-export class ControlerUser {
+export class ControlerDepense {
   /**
    * @swagger
    * /users:
@@ -39,10 +39,10 @@ export class ControlerUser {
    *                       example: Jean
    */
 
-  public static async getUsers(req, res) {
-    const userService = new UserService();
-    const users = await userService.getUsers();
-    res.send(users);
+  public static async getDepenses(req, res) {
+    const categService = new DepenseService();
+    const categs = await categService.getDepenses();
+    res.send(categs);
   }
 
   /**
@@ -80,11 +80,11 @@ export class ControlerUser {
    *                     example: Jean
    */
 
-  public static async getUser(req, res) {
-    const userService = new UserService();
-    let user_id: string = req.params.identifiant;
-    let user = await userService.getUser(user_id);
-    res.send(user);
+  public static async getDepense(req, res) {
+    const categService = new DepenseService();
+    let categ_id: string = req.params.identifiant;
+    let categ = await categService.getDepense(categ_id);
+    res.send(categ);
   }
 
   /**
@@ -115,9 +115,9 @@ export class ControlerUser {
    *          description: Utilisateur ajouté avec succès.
    */
 
-  public static async createUser(req, res) {
-    const userService = new UserService();
-    await userService.createUser(req.body);
+  public static async createDepense(req, res) {
+    const categService = new DepenseService();
+    await categService.createDepense(req.body);
     res.status(201).send();
   }
 }

@@ -37,6 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var controllerUser_1 = require("./controller/controllerUser");
+var controllerCateg_1 = require("./controller/controllerCateg");
+var controllerDepense_1 = require("./controller/controllerDepense");
 var supabase_js_1 = require("@supabase/supabase-js");
 var express = require("express");
 var bodyParser = require("body-parser");
@@ -66,8 +68,18 @@ app.get("/", function (req, res) { return res.send("🏠"); });
 // GET Utilisateur
 app.get("/users", function (req, res) { return controllerUser_1.ControlerUser.getUsers(req, res); });
 app.get("/user/:identifiant", function (req, res) { return controllerUser_1.ControlerUser.getUser(req, res); });
+// GET Catégorie de dépense
+app.get("/categs", function (req, res) { return controllerCateg_1.ControlerCateg.getCategs(req, res); });
+app.get("/categ/:identifiant", function (req, res) { return controllerCateg_1.ControlerCateg.getCateg(req, res); });
+// GET Dépenses
+app.get("/depenses", function (req, res) { return controllerDepense_1.ControlerDepense.getDepenses(req, res); });
+app.get("/depense/:identifiant", function (req, res) { return controllerDepense_1.ControlerDepense.getDepense(req, res); });
 // POST User
 app.post("/user/add", function (req, res) { return controllerUser_1.ControlerUser.createUser(req, res); });
+// POST Catégorie de dépense
+app.post("/categ/add", function (req, res) { return controllerCateg_1.ControlerCateg.createCateg(req, res); });
+// POST Dépense
+app.post("/depense/add", function (req, res) { return controllerDepense_1.ControlerDepense.createDepense(req, res); });
 // DELETE
 app.listen(4000, function () {
     "Serveur listening on port :4000";

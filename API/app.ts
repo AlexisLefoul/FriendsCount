@@ -1,11 +1,15 @@
 import { ControlerUser } from "./controller/controllerUser";
+import { ControlerCateg } from "./controller/controllerCateg";
+import { ControlerDepense } from "./controller/controllerDepense";
+
 import { createClient } from "@supabase/supabase-js";
 
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const supabaseUrl = "https://cekdzyiddjifsrtnemsj.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNla2R6eWlkZGppZnNydG5lbXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2Nzg3NTQsImV4cCI6MjAwMjI1NDc1NH0.22vNGb4SoqnVpX3vLGzlnjt3CRQy3RxnSRbEzILnro8";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNla2R6eWlkZGppZnNydG5lbXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2Nzg3NTQsImV4cCI6MjAwMjI1NDc1NH0.22vNGb4SoqnVpX3vLGzlnjt3CRQy3RxnSRbEzILnro8";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 /**
@@ -42,8 +46,22 @@ app.get("/", (req, res) => res.send("🏠"));
 app.get("/users", (req, res) => ControlerUser.getUsers(req, res));
 app.get("/user/:identifiant", (req, res) => ControlerUser.getUser(req, res));
 
+// GET Catégorie de dépense
+app.get("/categs", (req, res) => ControlerCateg.getCategs(req, res));
+app.get("/categ/:identifiant", (req, res) => ControlerCateg.getCateg(req, res));
+
+// GET Dépenses
+app.get("/depenses", (req, res) => ControlerDepense.getDepenses(req, res));
+app.get("/depense/:identifiant", (req, res) => ControlerDepense.getDepense(req, res));
+
 // POST User
 app.post("/user/add", (req, res) => ControlerUser.createUser(req, res));
+
+// POST Catégorie de dépense
+app.post("/categ/add", (req, res) => ControlerCateg.createCateg(req, res));
+
+// POST Dépense
+app.post("/depense/add", (req, res) => ControlerDepense.createDepense(req, res));
 
 // DELETE
 

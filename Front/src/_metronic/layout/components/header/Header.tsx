@@ -1,6 +1,5 @@
 import {FC, useEffect} from 'react'
 import {ILayout, useLayout} from '../../core'
-import {MenuInner} from './header-menus'
 
 const Header: FC = () => {
   const {config} = useLayout()
@@ -22,9 +21,8 @@ const Header: FC = () => {
         px-2 px-lg-0
     '
       id='kt_app_header_menu'
-      data-kt-menu='true'
+      data-kt-menu='false'
     >
-      <MenuInner />
     </div>
   )
 }

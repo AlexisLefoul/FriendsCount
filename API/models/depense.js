@@ -36,47 +36,77 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = void 0;
+exports.DepenseService = void 0;
 var supabase_js_1 = require("@supabase/supabase-js");
+var user_1 = require("../models/user");
+var categ_1 = require("../models/categ");
 var supabaseUrl = "https://cekdzyiddjifsrtnemsj.supabase.co";
 var supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNla2R6eWlkZGppZnNydG5lbXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2Nzg3NTQsImV4cCI6MjAwMjI1NDc1NH0.22vNGb4SoqnVpX3vLGzlnjt3CRQy3RxnSRbEzILnro8";
-var UserService = /** @class */ (function () {
-    function UserService() {
+var DepenseService = /** @class */ (function () {
+    function DepenseService() {
         this.supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseKey);
     }
-    UserService.prototype.getUsers = function () {
+    DepenseService.prototype.getDepenses = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, data, error;
+            var _a, data, error, updatedDepenses;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
+                            .from("depenses")
                             .select("*")];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
                         if (error) {
-                            console.error("Erreur lors de la récupération des utilisateurs :", error.message);
+                            console.error("Erreur lors de la récupération des dépenses :", error.message);
                             return [2 /*return*/, null];
                         }
-                        return [2 /*return*/, data];
+                        return [4 /*yield*/, Promise.all(data.map(function (element) { return __awaiter(_this, void 0, void 0, function () {
+                                var userService, categService, userResponse, categResponse, user, categ;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            userService = new user_1.UserService();
+                                            categService = new categ_1.CategService();
+                                            return [4 /*yield*/, userService.getUser(element.user_id)];
+                                        case 1:
+                                            userResponse = _a.sent();
+                                            return [4 /*yield*/, categService.getCateg(element.categ_depense_id)];
+                                        case 2:
+                                            categResponse = _a.sent();
+                                            user = userResponse;
+                                            categ = categResponse;
+                                            return [2 /*return*/, {
+                                                    id: element.id,
+                                                    user: user,
+                                                    categ: categ,
+                                                    montant: element.montant,
+                                                    date: element.date_creation,
+                                                }];
+                                    }
+                                });
+                            }); }))];
+                    case 2:
+                        updatedDepenses = _b.sent();
+                        return [2 /*return*/, updatedDepenses];
                 }
             });
         });
     };
-    UserService.prototype.getUser = function (userId) {
+    DepenseService.prototype.getDepense = function (depenseId) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, data, error;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
+                            .from("depenses")
                             .select("*")
-                            .eq("id", userId)
+                            .eq("id", depenseId)
                             .single()];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
                         if (error) {
-                            console.error("Erreur lors de la récupération de l'utilisateur :", error.message);
+                            console.error("Erreur lors de la récupération de la dépense :", error.message);
                             return [2 /*return*/, null];
                         }
                         return [2 /*return*/, data];
@@ -84,19 +114,25 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.createUser = function (body) {
+    DepenseService.prototype.createDepense = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, data, error;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
-                            .insert([{ nom: body.nom, prenom: body.prenom }])
+                            .from("depenses")
+                            .insert([
+                            {
+                                montant: body.montant,
+                                user_id: body.user,
+                                categ_depense_id: body.categ,
+                            },
+                        ])
                             .single()];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
                         if (error) {
-                            console.error("Erreur lors de la création de l'utilisateur :", error.message);
+                            console.error("Erreur lors de la création de la dépense :", error.message);
                             return [2 /*return*/, null];
                         }
                         return [2 /*return*/, data];
@@ -104,20 +140,24 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.updateUser = function (body) {
+    DepenseService.prototype.updateDepense = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, data, error;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
-                            .update({ nom: body.nom, prenom: body.prenom })
-                            .eq("id", body.userId)
+                            .from("depenses")
+                            .update({
+                            montant: body.montant,
+                            user_id: body.user,
+                            categ_depense_id: body.categ,
+                        })
+                            .eq("id", body.depenseId)
                             .single()];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
                         if (error) {
-                            console.error("Erreur lors de la mise à jour de l'utilisateur :", error.message);
+                            console.error("Erreur lors de la mise à jour de la dépense :", error.message);
                             return [2 /*return*/, null];
                         }
                         return [2 /*return*/, data];
@@ -125,19 +165,19 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.deleteUser = function (userId) {
+    DepenseService.prototype.deleteDepense = function (depenseId) {
         return __awaiter(this, void 0, void 0, function () {
             var error;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
+                            .from("depenses")
                             .delete()
-                            .eq("id", userId)];
+                            .eq("id", depenseId)];
                     case 1:
                         error = (_a.sent()).error;
                         if (error) {
-                            console.error("Erreur lors de la suppression de l'utilisateur :", error.message);
+                            console.error("Erreur lors de la suppression de la dépense :", error.message);
                             return [2 /*return*/, false];
                         }
                         return [2 /*return*/, true];
@@ -145,7 +185,7 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    return UserService;
+    return DepenseService;
 }());
-exports.UserService = UserService;
-//# sourceMappingURL=user.js.map
+exports.DepenseService = DepenseService;
+//# sourceMappingURL=depense.js.map

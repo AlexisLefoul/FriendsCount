@@ -36,26 +36,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = void 0;
+exports.CategService = void 0;
 var supabase_js_1 = require("@supabase/supabase-js");
 var supabaseUrl = "https://cekdzyiddjifsrtnemsj.supabase.co";
 var supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNla2R6eWlkZGppZnNydG5lbXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2Nzg3NTQsImV4cCI6MjAwMjI1NDc1NH0.22vNGb4SoqnVpX3vLGzlnjt3CRQy3RxnSRbEzILnro8";
-var UserService = /** @class */ (function () {
-    function UserService() {
+var CategService = /** @class */ (function () {
+    function CategService() {
         this.supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseKey);
     }
-    UserService.prototype.getUsers = function () {
+    CategService.prototype.getCategs = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, data, error;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
+                            .from("categ_depense")
                             .select("*")];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
                         if (error) {
-                            console.error("Erreur lors de la récupération des utilisateurs :", error.message);
+                            console.error("Erreur lors de la récupération des catégories :", error.message);
                             return [2 /*return*/, null];
                         }
                         return [2 /*return*/, data];
@@ -63,20 +63,20 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.getUser = function (userId) {
+    CategService.prototype.getCateg = function (categId) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, data, error;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
+                            .from("categ_depense")
                             .select("*")
-                            .eq("id", userId)
+                            .eq("id", categId)
                             .single()];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
                         if (error) {
-                            console.error("Erreur lors de la récupération de l'utilisateur :", error.message);
+                            console.error("Erreur lors de la récupération de la catégorie :", error.message);
                             return [2 /*return*/, null];
                         }
                         return [2 /*return*/, data];
@@ -84,19 +84,19 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.createUser = function (body) {
+    CategService.prototype.createCateg = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, data, error;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
-                            .insert([{ nom: body.nom, prenom: body.prenom }])
+                            .from("categ_depense")
+                            .insert([{ nom: body.nom }])
                             .single()];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
                         if (error) {
-                            console.error("Erreur lors de la création de l'utilisateur :", error.message);
+                            console.error("Erreur lors de la création de la catégorie :", error.message);
                             return [2 /*return*/, null];
                         }
                         return [2 /*return*/, data];
@@ -104,20 +104,20 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.updateUser = function (body) {
+    CategService.prototype.updateCateg = function (id, nom) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, data, error;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
-                            .update({ nom: body.nom, prenom: body.prenom })
-                            .eq("id", body.userId)
+                            .from("categ_depense")
+                            .update({ nom: nom })
+                            .eq("id", id)
                             .single()];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
                         if (error) {
-                            console.error("Erreur lors de la mise à jour de l'utilisateur :", error.message);
+                            console.error("Erreur lors de la mise à jour de la catégorie :", error.message);
                             return [2 /*return*/, null];
                         }
                         return [2 /*return*/, data];
@@ -125,19 +125,19 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.deleteUser = function (userId) {
+    CategService.prototype.deleteCateg = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var error;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users_app")
+                            .from("categ_depense")
                             .delete()
-                            .eq("id", userId)];
+                            .eq("id", id)];
                     case 1:
                         error = (_a.sent()).error;
                         if (error) {
-                            console.error("Erreur lors de la suppression de l'utilisateur :", error.message);
+                            console.error("Erreur lors de la suppression de la catégorie :", error.message);
                             return [2 /*return*/, false];
                         }
                         return [2 /*return*/, true];
@@ -145,7 +145,7 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    return UserService;
+    return CategService;
 }());
-exports.UserService = UserService;
-//# sourceMappingURL=user.js.map
+exports.CategService = CategService;
+//# sourceMappingURL=categ.js.map
