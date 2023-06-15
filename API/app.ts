@@ -47,8 +47,8 @@ app.post("/user/add", (req, res) => ControlerUser.createUser(req, res));
 
 // DELETE
 
-app.listen(3000, () => {
-  "Serveur listening on port :3000";
+app.listen(4000, () => {
+  "Serveur listening on port :4000";
 });
 
 async function main() {
@@ -69,7 +69,7 @@ const swaggerDefinition = {
       "This is a REST API application made with Express. It retrieves data from JSONPlaceholder.",
   },
   servers: [
-    { url: "http://localhost:3000/", description: "Development server" },
+    { url: "http://localhost:4000/", description: "Development server" },
   ],
 };
 

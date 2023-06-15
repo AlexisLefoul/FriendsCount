@@ -50,7 +50,7 @@ var UserService = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users")
+                            .from("users_app")
                             .select("*")];
                     case 1:
                         _a = _b.sent(), data = _a.data, error = _a.error;
@@ -69,7 +69,7 @@ var UserService = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users")
+                            .from("users_app")
                             .select("*")
                             .eq("id", userId)
                             .single()];
@@ -90,7 +90,7 @@ var UserService = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users")
+                            .from("users_app")
                             .insert([{ nom: body.nom, prenom: body.prenom }])
                             .single()];
                     case 1:
@@ -110,7 +110,7 @@ var UserService = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.supabase
-                            .from("users")
+                            .from("users_app")
                             .update({ nom: nom, prenom: prenom })
                             .eq("id", id)
                             .single()];
@@ -130,7 +130,10 @@ var UserService = /** @class */ (function () {
             var error;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.supabase.from("users").delete().eq("id", id)];
+                    case 0: return [4 /*yield*/, this.supabase
+                            .from("users_app")
+                            .delete()
+                            .eq("id", id)];
                     case 1:
                         error = (_a.sent()).error;
                         if (error) {

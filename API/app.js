@@ -69,8 +69,8 @@ app.get("/user/:identifiant", function (req, res) { return controllerUser_1.Cont
 // POST User
 app.post("/user/add", function (req, res) { return controllerUser_1.ControlerUser.createUser(req, res); });
 // DELETE
-app.listen(3000, function () {
-    "Serveur listening on port :3000";
+app.listen(4000, function () {
+    "Serveur listening on port :4000";
 });
 function main() {
     return __awaiter(this, void 0, void 0, function () {
@@ -96,7 +96,7 @@ var swaggerDefinition = {
         description: "This is a REST API application made with Express. It retrieves data from JSONPlaceholder.",
     },
     servers: [
-        { url: "http://localhost:3000/", description: "Development server" },
+        { url: "http://localhost:4000/", description: "Development server" },
     ],
 };
 var options = {
