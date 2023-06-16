@@ -64,6 +64,7 @@ app.post("/categ/add", (req, res) => ControlerCateg.createCateg(req, res));
 app.post("/depense/add", (req, res) => ControlerDepense.createDepense(req, res));
 
 // DELETE
+app.delete("/user/:identifiant", (req, res) => ControlerUser.deleteUser(req, res));
 
 app.listen(4000, () => {
   "Serveur listening on port :4000";

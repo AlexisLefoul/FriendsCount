@@ -81,6 +81,7 @@ app.post("/categ/add", function (req, res) { return controllerCateg_1.ControlerC
 // POST Dépense
 app.post("/depense/add", function (req, res) { return controllerDepense_1.ControlerDepense.createDepense(req, res); });
 // DELETE
+app.delete("/user/:identifiant", function (req, res) { return controllerUser_1.ControlerUser.deleteUser(req, res); });
 app.listen(4000, function () {
     "Serveur listening on port :4000";
 });

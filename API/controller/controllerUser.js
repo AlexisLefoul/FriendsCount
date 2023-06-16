@@ -187,6 +187,24 @@ var ControlerUser = /** @class */ (function () {
             });
         });
     };
+    ControlerUser.deleteUser = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var userService, userId, user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        userService = new user_1.UserService();
+                        userId = req.params.identifiant;
+                        return [4 /*yield*/, userService.deleteUser(userId)];
+                    case 1:
+                        user = _a.sent();
+                        res.status(204);
+                        res.send(user);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     return ControlerUser;
 }());
 exports.ControlerUser = ControlerUser;

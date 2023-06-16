@@ -120,4 +120,13 @@ export class ControlerUser {
     await userService.createUser(req.body);
     res.status(201).send();
   }
+
+
+  public static async deleteUser(req, res) {
+    const userService = new UserService();
+    let userId: string = req.params.identifiant;
+    let user = await userService.deleteUser(userId);
+    res.status(204);
+    res.send(user);
+  }
 }

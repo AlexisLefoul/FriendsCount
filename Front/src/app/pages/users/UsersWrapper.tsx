@@ -54,7 +54,32 @@ const UsersPage: FC = () => {
   function handleModalClose() {
     setModalVisible(false)
     setRefresh(true)
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
+  }
+
+  function deleteUserModal(event: React.MouseEvent<HTMLButtonElement>) {
+    const userId = event.currentTarget.getAttribute('data-bs-user')
+    const userIdInput = document.getElementById('user-id-input') as HTMLInputElement
+
+    if (userIdInput && userId !== null) {
+      userIdInput.value = userId
+    }
+  }
+
+  function deleteUser() {
+    const userIdInput = document.getElementById('user-id-input') as HTMLInputElement
+    if (userIdInput) {
+      const userId = userIdInput.value
+      // Utilisez l'ID de l'utilisateur pour effectuer les actions nécessaires
+      API.delete('user/' + userId)
+
+      setRefresh(true)
+      setTimeout(() => {
+        window.location.reload()
+      }, 800)
+    }
   }
 
   useEffect(() => {
@@ -63,13 +88,12 @@ const UsersPage: FC = () => {
 
   return (
     <>
-      <div>
+      <div className='d-flex flex-row justify-content-between'>
         <button
           type='button'
           className='btn btn-primary'
           data-bs-toggle='modal'
           data-bs-target='#kt_modal_1'
-          onClick={() => setModalVisible(true)}
         >
           Ajouter un utilisateur
         </button>
@@ -78,8 +102,9 @@ const UsersPage: FC = () => {
         <table className='table table-striped gy-7 gs-7'>
           <thead>
             <tr className='fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200'>
-              <th className='min-w-200px'>Nom</th>
-              <th className='min-w-400px'>Prénom</th>
+              <th className='min-w-300px'>Nom</th>
+              <th className='min-w-300px'>Prénom</th>
+              <th className='min-w-100px'></th>
             </tr>
           </thead>
           <tbody>
@@ -88,6 +113,18 @@ const UsersPage: FC = () => {
                 <tr key={uti.id}>
                   <td>{uti.nom}</td>
                   <td>{uti.prenom}</td>
+                  <td>
+                    <button
+                      type='button'
+                      className='btn btn-danger'
+                      data-bs-toggle='modal'
+                      data-bs-target='#kt_modal_2'
+                      data-bs-user={uti.id}
+                      onClick={deleteUserModal}
+                    >
+                      Supprimer
+                    </button>
+                  </td>
                 </tr>
               </>
             ))}
@@ -144,7 +181,11 @@ const UsersPage: FC = () => {
                 </div>
               </div>
               <div className='modal-footer'>
-                <button type='button' className='btn btn-light' data-bs-dismiss='modal'>
+                <button
+                  type='button'
+                  className='btn btn-active-light-primary'
+                  data-bs-dismiss='modal'
+                >
                   Annuler
                 </button>
                 <button type='submit' className='btn btn-primary' onClick={handleModalClose}>
@@ -152,6 +193,38 @@ const UsersPage: FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+
+      <div className='modal fade' tabIndex={-1} id='kt_modal_2'>
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h5 className='modal-title'>Suppression d'un utilisateur</h5>
+              <div
+                className='btn btn-icon btn-sm btn-active-light-danger ms-2'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+              >
+                <KTSVG
+                  path='/media/icons/duotune/arrows/arr061.svg'
+                  className='svg-icon svg-icon-2x'
+                />
+              </div>
+            </div>
+            <div className='modal-body'>
+              <h3>Etes-vous sûr de vouloir supprimer cet utilisateur ?</h3>
+              <input type='hidden' id='user-id-input' value='' />
+            </div>
+            <div className='modal-footer'>
+              <button type='button' className='btn btn-active-light-danger' data-bs-dismiss='modal'>
+                Annuler
+              </button>
+              <button type='submit' className='btn btn-danger' onClick={deleteUser}>
+                Supprimer
+              </button>
+            </div>
           </div>
         </div>
       </div>
