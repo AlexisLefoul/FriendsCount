@@ -47,8 +47,14 @@ export class DepenseService {
       return null;
     }
 
+    const sortedDepenses = data.sort((a: Depense, b: Depense) => {
+      const dateA = new Date(a.date_creation);
+      const dateB = new Date(b.date_creation);
+      return dateA.getTime() - dateB.getTime();
+    });
+
     const updatedDepenses: DepenseForList[] = await Promise.all(
-      data.map(async (element: Depense) => {
+      sortedDepenses.map(async (element: Depense) => {
         const userService = new UserService();
         const categService = new CategService();
         const userResponse = await userService.getUser(element.user_id);
@@ -58,13 +64,14 @@ export class DepenseService {
 
         const user = userResponse;
         const categ = categResponse;
+        const formattedDate = formatDate(element.date_creation);
 
         return {
           id: element.id,
           user,
           categ,
           montant: element.montant,
-          date: element.date_creation,
+          date: formattedDate,
         };
       })
     );
@@ -160,4 +167,13 @@ export class DepenseService {
 
     return true;
   }
+}
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = String(date.getFullYear());
+
+  return `${day}/${month}/${year}`;
 }

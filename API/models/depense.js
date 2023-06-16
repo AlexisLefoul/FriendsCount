@@ -48,7 +48,7 @@ var DepenseService = /** @class */ (function () {
     }
     DepenseService.prototype.getDepenses = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, data, error, updatedDepenses;
+            var _a, data, error, sortedDepenses, updatedDepenses;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -61,8 +61,13 @@ var DepenseService = /** @class */ (function () {
                             console.error("Erreur lors de la récupération des dépenses :", error.message);
                             return [2 /*return*/, null];
                         }
-                        return [4 /*yield*/, Promise.all(data.map(function (element) { return __awaiter(_this, void 0, void 0, function () {
-                                var userService, categService, userResponse, categResponse, user, categ;
+                        sortedDepenses = data.sort(function (a, b) {
+                            var dateA = new Date(a.date_creation);
+                            var dateB = new Date(b.date_creation);
+                            return dateA.getTime() - dateB.getTime();
+                        });
+                        return [4 /*yield*/, Promise.all(sortedDepenses.map(function (element) { return __awaiter(_this, void 0, void 0, function () {
+                                var userService, categService, userResponse, categResponse, user, categ, formattedDate;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
@@ -76,12 +81,13 @@ var DepenseService = /** @class */ (function () {
                                             categResponse = _a.sent();
                                             user = userResponse;
                                             categ = categResponse;
+                                            formattedDate = formatDate(element.date_creation);
                                             return [2 /*return*/, {
                                                     id: element.id,
                                                     user: user,
                                                     categ: categ,
                                                     montant: element.montant,
-                                                    date: element.date_creation,
+                                                    date: formattedDate,
                                                 }];
                                     }
                                 });
@@ -188,4 +194,11 @@ var DepenseService = /** @class */ (function () {
     return DepenseService;
 }());
 exports.DepenseService = DepenseService;
+function formatDate(dateString) {
+    var date = new Date(dateString);
+    var day = String(date.getDate()).padStart(2, "0");
+    var month = String(date.getMonth() + 1).padStart(2, "0");
+    var year = String(date.getFullYear());
+    return "".concat(day, "/").concat(month, "/").concat(year);
+}
 //# sourceMappingURL=depense.js.map

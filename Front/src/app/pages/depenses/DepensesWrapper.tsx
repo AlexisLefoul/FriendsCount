@@ -59,14 +59,21 @@ const DepensesPage: FC = () => {
   async function handleSubmitDepense(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     try {
-      // Effectuer l'appel POST à votre API
-      await API.post('depense/add', depense)
+      console.log(depense)
+      if (depense.categ.length === 0 || depense.user.length === 0 || depense.montant.length === 0) {
+        // Redirection vers la page d'erreur après 3 secondes
+        setTimeout(() => {
+          window.location.href = 'friendscount/error/404'
+        }, 1000) // 1000 millisecondes = 1 secondes
+      } else {
+        // Effectuer l'appel POST à votre API
+        await API.post('depense/add', depense)
 
+        // Fermer la modal en mettant à jour l'état modalOpen
+        handleModalClose()
+      }
       // Réinitialiser les valeurs du formulaire
       setDepense({user: '', categ: '', montant: ''})
-
-      // Fermer la modal en mettant à jour l'état modalOpen
-      handleModalClose()
     } catch (error) {
       console.error("Erreur lors de la création d'une dépénse:", error)
     }
@@ -99,7 +106,9 @@ const DepensesPage: FC = () => {
   function handleModalClose() {
     setModalVisible(false)
     setRefresh(true)
-    window.location.reload()
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
   }
 
   useEffect(() => {
@@ -108,7 +117,6 @@ const DepensesPage: FC = () => {
     getUsers()
   }, [refresh])
 
-  console.log(depenses)
   return (
     <>
       <div className='d-flex flex-row justify-content-between'>
@@ -141,20 +149,17 @@ const DepensesPage: FC = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Tiger</td>
-              <td>System</td>
-              <td>System</td>
-              <td>30€</td>
-              <td>10/12/2020</td>
-            </tr>
-            <tr>
-              <td>Garrett</td>
-              <td>Accountant</td>
-              <td>System</td>
-              <td>10€</td>
-              <td>01/03/2019</td>
-            </tr>
+            {depenses?.map((dep) => (
+              <>
+                <tr key={dep.id}>
+                  <td>{dep.user.nom}</td>
+                  <td>{dep.user.prenom}</td>
+                  <td>{dep.categ.nom}</td>
+                  <td>{dep.montant} €</td>
+                  <td>{dep.date}</td>
+                </tr>
+              </>
+            ))}
           </tbody>
         </table>
       </div>
